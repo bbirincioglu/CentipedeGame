@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">CentipedeGame</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="main_menu_activity_bluetooth_game_button">BLUETOOTH GAME</string>
+    <string name="main_menu_activity_settings_button">SETTINGS</string>
+    <string name="main_menu_activity_game_results_button">GAME RESULTS</string>
+    <string name="main_menu_activity_exit_button">EXIT</string>
+    <string name="title_activity_bluetooth_game">BluetoothGameActivity</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="title_activity_game_results">GameResultsActivity</string>
+</resources>

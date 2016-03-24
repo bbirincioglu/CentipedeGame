@@ -1,0 +1,30 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context=".MainMenuActivity">
+
+    <Button
+        android:text="@string/main_menu_activity_bluetooth_game_button"
+        android:id="@id/main_menu_activity_bluetooth_game_button"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content" />
+    <Button
+        android:text="@string/main_menu_activity_settings_button"
+        android:id="@id/main_menu_activity_settings_button"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content" />
+    <Button
+        android:text="@string/main_menu_activity_game_results_button"
+        android:id="@id/main_menu_activity_game_results_button"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content" />
+    <Button
+        android:text="@string/main_menu_activity_exit_button"
+        android:id="@id/main_menu_activity_exit_button"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content" />
+</LinearLayout>
