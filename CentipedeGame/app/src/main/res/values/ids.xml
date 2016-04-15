@@ -1,8 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item type="id" name="main_menu_activity_container"></item>
-    <item type="id" name="main_menu_activity_bluetooth_game_button"></item>
-    <item type="id" name="main_menu_activity_settings_button"></item>
-    <item type="id" name="main_menu_activity_game_results_button"></item>
-    <item type="id" name="main_menu_activity_exit_button"></item>
+    <item type="id" name="bluetoothGameButton"></item>
+    <item type="id" name="settingsButton"></item>
+    <item type="id" name="gameResultsButton"></item>
+    <item type="id" name="exitButton"></item>
+
+    <item type="id" name="wifiMobileDataTextView"></item>
+    <item type="id" name="wifiButton"></item>
+    <item type="id" name="mobileDataButton"></item>
+
+    <item type="id" name="nameSurnameEditText"></item>
+    <item type="id" name="errorMessageTextView"></item>
+    <item type="id" name="playerInfoDialogContainer"></item>
+    <item type="id" name="continueButton"></item>
+
+    <item type="id" name="discoveryListView"></item>
+    <item type="id" name="discoveryListRow"></item>
+    <item type="id" name="discoveryListRowTextView"></item>
+    <item type="id" name="discoveryListRowCheckBox"></item>
+    <item type="id" name="connectButton"></item>
+    <item type="id" name="discoverButton"></item>
+
+    <item type="id" name="informativeDialogContainer"></item>
+    <item type="id" name="informativeDialogTextView"></item>
+    <item type="id" name="informativeDialogButton"></item>
+
+    <item type="id" name="hostGameButton"></item>
+    <item type="id" name="joinGameButton"></item>
+
+    <item type="id" name="gameResultsListView"></item>
+
+    <!--PASSWORD DIALOG-->
+    <item type="id" name="passwordDialogNextButton"></item>
+    <item type="id" name="passwordDialogPreviousButton"></item>
+    <item type="id" name="passwordDialogEditText"></item>
+
+    <!--GAME RESULTS ACTIVITY-->
+    <item type="id" name="gameResultsGetResultsButton"></item>
+    <item type="id" name="gameResultsSaveResultsButton"></item>
+
+    <!--BACKGROUND JOB DIALOG-->
+    <item type="id" name="backgroundJobTextView"></item>
+    <item type="id" name="startGameButton"></item>
+
+    <!--SETTINGS-->
+    <item type="id" name="withCommitmentCheckBox"></item>
+    <item type="id" name="punishmentEditText"></item>
+    <item type="id" name="settingsSaveButton"></item>
+
+    <!--GAME PLAY ACTIVITY-->
+    <item type="id" name="commitToLinearLayout"></item>
+    <item type="id" name="commitToCooperateButton"></item>
+    <item type="id" name="commitToDefectButton"></item>
+    <item type="id" name="decideToLinearLayout"></item>
+    <item type="id" name="decideToCooperateButton"></item>
+    <item type="id" name="decideToDefectButton"></item>
 </resources>

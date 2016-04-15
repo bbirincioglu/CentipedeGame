@@ -5,17 +5,13 @@ import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
 
 /**
- * Created by bbirincioglu on 3/24/2016.
+ * Created by bbirincioglu on 2/28/2016.
  */
 public class AnimationHandler {
     public static final int INVALID = Integer.MAX_VALUE;
 
-    public AnimationHandler() {
-
-    }
-
-    public long animate(View v, int[] animations, long duration, int repeatMode, int repeatCount) {
-        AnimationSet animationSet = new AnimationSet(false);
+    public long animateOn(View v, int[] animations, int duration, int repeatMode, int repeatCount) {
+        AnimationSet animationSet = new AnimationSet(true);
         int length = animations.length;
 
         for (int i = 0; i < length; i++) {

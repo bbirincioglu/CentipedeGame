@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@id/playerInfoDialogContainer">
+
+    <EditText
+        android:hint="@string/nameSurnameEditText"
+        android:id="@id/nameSurnameEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"/>
+    <TextView
+        android:id="@id/errorMessageTextView"
+        android:hint="FILL THE FIELD CORRECTLY!!!"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:textColor="@android:color/holo_red_light"
+        android:textColorHint="@android:color/holo_red_light"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"/>
+    <Button
+        android:id="@id/continueButton"
+        android:text="@string/continueButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_blue_light"/>
+</LinearLayout>

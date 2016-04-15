@@ -1,16 +1,90 @@
 package com.example.bbirincioglu.centipedegame;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
 public class SettingsActivity extends AppCompatActivity {
+    private SettingsController controller;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+        setController(new SettingsController(this));
+        DialogFactory dialogFactory = DialogFactory.getInstance();
+        dialogFactory.setContext(this);
+        dialogFactory.create(DialogFactory.DIALOG_PASSWORD).show();
+        initialize();
+    }
+
+    private void initialize() {
+        SettingsController controller = getController();
+        GameSettings settings = GameSettings.loadFromPreferences(this);
+        String maximumStepNumber = settings.getMaximumStepNumber();
+        String ratio = settings.getRatio();
+        String initialTotal = settings.getInitialTotal();
+        String multiplicator = settings.getMultiplicator();
+        String commitmentType = settings.getCommitmentType();
+        String punishment = settings.getPunishment();
+
+        TextView textView;
+        EditText editText;
+        SeekBar seekBar;
+        RadioButton radioButton1;
+        RadioButton radioButton2;
+
+        textView = ((TextView) findViewById(R.id.maximumStepNumberTextView));
+        textView.setText(maximumStepNumber);
+
+        seekBar = ((SeekBar) findViewById(R.id.maximumStepNumberSeekBar));
+        seekBar.setOnSeekBarChangeListener(controller);
+        seekBar.setMax(100);
+        seekBar.setProgress(Integer.valueOf(maximumStepNumber));
+
+        editText = ((EditText) findViewById(R.id.ratioEditText));
+        editText.setText(ratio);
+        editText.addTextChangedListener(controller);
+        controller.addEditText(editText);
+
+        editText = ((EditText) findViewById(R.id.initialTotalEditText));
+        editText.setText(initialTotal);
+        editText.addTextChangedListener(controller);
+        controller.addEditText(editText);
+
+        editText = ((EditText) findViewById(R.id.multiplicatorEditText));
+        editText.setText(multiplicator);
+        editText.setOnClickListener(controller);
+        controller.addEditText(editText);
+
+        radioButton1 = ((RadioButton) findViewById(R.id.openCommitmentRadioButton));
+        radioButton2 = ((RadioButton) findViewById(R.id.closedCommitmentRadioButton));
+
+        if (commitmentType.equals("Closed")) {
+            radioButton1.setChecked(false);
+            radioButton2.setChecked(true);
+        } else if (commitmentType.equals("Open")) {
+            radioButton1.setChecked(true);
+            radioButton2.setChecked(false);
+        }
+
+        radioButton1.setOnCheckedChangeListener(controller);
+        radioButton2.setOnCheckedChangeListener(controller);
+
+        editText = (EditText) findViewById(R.id.punishmentEditText);
+        editText.setText(punishment);
+        editText.addTextChangedListener(controller);
+        controller.addEditText(editText);
     }
 
     @Override
@@ -33,5 +107,25 @@ public class SettingsActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(Keys.RETURN_FROM_ACTIVITY, true);
+        new ActivitySwitcher().fromPreviousToNext(this, MainMenuActivity.class, bundle, true);
+    }
+
+    public SettingsController getController() {
+        return controller;
+    }
+
+    public void setController(SettingsController controller) {
+        this.controller = controller;
+    }
+
+    public void onClick(View v) {
+        getController().onClick(v);
     }
 }

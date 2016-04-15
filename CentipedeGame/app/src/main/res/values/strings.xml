@@ -1,13 +1,47 @@
 <resources>
     <string name="app_name">CentipedeGame</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="bluetoothGameButton">BLUETOOTH GAME</string>
+    <string name="settingsButton">SETTINGS</string>
+    <string name="gameResultsButton">GAME RESULTS</string>
+    <string name="exitButton">EXIT</string>
 
-    <string name="main_menu_activity_bluetooth_game_button">BLUETOOTH GAME</string>
-    <string name="main_menu_activity_settings_button">SETTINGS</string>
-    <string name="main_menu_activity_game_results_button">GAME RESULTS</string>
-    <string name="main_menu_activity_exit_button">EXIT</string>
+    <string name="wifiButton">WIRELESS</string>
+    <string name="mobileDataButton">MOBILE DATA</string>
+
+    <string name="nameSurnameEditText">NAME SURNAME</string>
+    <string name="continueButton">CONTINUE</string>
+
+    <string name="hostGameButton">HOST GAME</string>
+    <string name="joinGameButton">JOIN GAME</string>
+    <string name="connectButton">CONNECT</string>
+    <string name="discoverButton">DISCOVER</string>
+    <string name="startGameButton">START GAME</string>
+
+    <string name="action_settings">Settings</string>
     <string name="title_activity_bluetooth_game">BluetoothGameActivity</string>
+
+    <string name="hello_world">Hello world!</string>
     <string name="title_activity_settings">SettingsActivity</string>
+
+
+    <!--ERROR MESSAGES-->
+    <string name="emptyFieldError">Fill All Fields!!!</string>
+
+    <!--INFORMATIVE DIALOG-->
+    <string name="informativeDialogButton">OK</string>
+    <string name="title_activity_sample">SampleActivity</string>
     <string name="title_activity_game_results">GameResultsActivity</string>
+
+    <!--PASSWORD DIALOG-->
+    <string name="passwordDialogPreviousButton">PREVIOUS</string>
+    <string name="passwordDialogNextButton">NEXT</string>
+
+    <!--GAME RESULTS ACTIVITY-->
+    <string name="gameResultsGetResultsButton">GET RESULTS</string>
+    <string name="gameResultsSaveResultsButton">SAVE RESULTS</string>
+    <string name="title_activity_game_play">GamePlayActivity</string>
+
+    <!--Settings-->
+    <string name="withCommitmentCheckBox">Commitment</string>
+    <string name="punishmentEditText">Punishment</string>
 </resources>

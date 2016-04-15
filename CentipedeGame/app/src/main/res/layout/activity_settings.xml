@@ -1,12 +1,142 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.example.bbirincioglu.centipedegame.SettingsActivity">
+<TableLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.bbirincioglu.prisonersdilemma.SettingsActivity"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_gravity="center_horizontal"
+    android:gravity="center"
+    android:id="@+id/settingsTableLayout">
 
-    <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/activity_vertical_margin">
+        <TextView
+            android:text="Max. Step Num: "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12dp"
+            android:textStyle="bold"
+            android:layout_marginRight="-10dp"/>
+        <SeekBar
+            android:id="@+id/maximumStepNumberSeekBar"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="-10dp"/>
+        <TextView
+            android:id="@+id/maximumStepNumberTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12dp"
+            android:textStyle="bold"
+            android:layout_span="2"/>
+    </TableRow>
 
-</RelativeLayout>
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/activity_vertical_margin">
+        <TextView
+            android:text="Initial Total: "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12dp"
+            android:textStyle="bold"
+            android:layout_marginRight="-10dp"/>
+        <EditText
+            android:id="@+id/initialTotalEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12dp"
+            android:textStyle="bold"
+            android:layout_marginRight="-5dp"/>
+        <TextView
+            android:text="Multiplicator: "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12dp"
+            android:textStyle="bold"
+            android:layout_marginRight="-10dp"/>
+        <EditText
+            android:id="@+id/multiplicatorEditText"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:textSize="12dp"
+            android:textStyle="bold"/>
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/activity_vertical_margin">
+        <TextView
+            android:text="Ratio: "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12dp"
+            android:textStyle="bold"
+            android:layout_marginRight="-10dp"/>
+        <EditText
+            android:id="@+id/ratioEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12dp"
+            android:textStyle="bold"
+            android:layout_marginRight="-5dp"/>
+        <TextView
+            android:text="Punishment: "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12dp"
+            android:textStyle="bold"
+            android:layout_marginRight="-10dp"/>
+        <EditText
+            android:id="@id/punishmentEditText"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:textSize="12dp"
+            />
+    </TableRow>
+
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/activity_vertical_margin">
+        <TextView
+            android:text="Commitment Type: "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12dp"
+            android:textStyle="bold"/>
+        <RadioButton
+            android:text="Open"
+            android:id="@+id/openCommitmentRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12dp"
+            android:textStyle="bold"
+            android:layout_marginRight="-10dp"/>
+        <RadioButton
+            android:text="Closed"
+            android:id="@+id/closedCommitmentRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12dp"
+            android:textStyle="bold"/>
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:text="SAVE"
+            android:id="@id/settingsSaveButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/holo_blue_light"
+            android:onClick="onClick"/>
+    </TableRow>
+</TableLayout>
