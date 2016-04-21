@@ -135,11 +135,11 @@ public class Writer {
                 HSSFCell cell = row.createCell(j);
                 cell.setCellValue(cellValue);
 
-                if (-1 < i && i <= 1) {
+                if (-1 < j && j <= 1) {
                     cell.setCellStyle(gameSettingsCellStyle);
-                } else if (1 < i && i <= 5) {
+                } else if (1 < j && j <= 5) {
                     cell.setCellStyle(p1CellStyle);
-                } else if (5 < i && i <= 9) {
+                } else if (5 < j && j <= 9) {
                     cell.setCellStyle(p2CellStyle);
                 } else {
                     cell.setCellStyle(gameSettingsCellStyle);

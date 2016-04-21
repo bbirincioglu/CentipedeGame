@@ -10,6 +10,7 @@ public class GameResultEvaluator {
 
     public double[] evaluate(GameResult gameResult) {
         double[] result = new double[2];
+        String playerFinished = gameResult.getPlayerFinished();
         double p1Payoff = Double.valueOf(gameResult.getP1Payoff());
         double p2Payoff = Double.valueOf(gameResult.getP2Payoff());
         double punishment = Double.valueOf(gameResult.getPunishment());
@@ -17,12 +18,14 @@ public class GameResultEvaluator {
         int p1Commitment = Integer.valueOf(gameResult.getP1Commitment());
         int p2Commitment = Integer.valueOf(gameResult.getP2Commitment());
 
-        if (finalStepNumber > p1Commitment) {
-            p1Payoff += punishment;
-        }
-
-        if (finalStepNumber > p2Commitment) {
-            p2Payoff += punishment;
+        if (playerFinished.equals("P1")) {
+            if (finalStepNumber  < p1Commitment) {
+                p1Payoff += punishment;
+            }
+        } else if (playerFinished.equals("P2")) {
+            if (finalStepNumber < p2Commitment) {
+                p2Payoff += punishment;
+            }
         }
 
         result[0] = p1Payoff;
