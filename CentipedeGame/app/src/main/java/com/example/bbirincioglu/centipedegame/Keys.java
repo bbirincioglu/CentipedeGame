@@ -27,7 +27,7 @@ public class Keys {
     public static final String PLAYER_2_PAYOFF = "p2Payoff";
 
     public static final String RETURN_FROM_ACTIVITY = "returnFromActivity";
-    public static final String PASSWORD_RESTRICTED_AREA = "14531915";
+    public static final String PASSWORD_RESTRICTED_AREA = "";
 
     public static final String PLAYER_INFO_PREFERENCES = "playerInfoPreferences";
     public static final String PLAYER_NAME = "playerName";
