@@ -1,7 +1,7 @@
 package com.example.bbirincioglu.centipedegame;
 
 /**
- * Created by bbirincioglu on 3/23/2016.
+ * The interface implemented by GUI classes (usually Dialogs) that listen instance of Writer class.
  */
 public interface WriterObserver {
     public void update(Writer writer);

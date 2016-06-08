@@ -12,10 +12,10 @@ import com.parse.ParseException;
 import com.parse.SaveCallback;
 
 /**
- * Created by bbirincioglu on 3/14/2016.
+ * Controller for GamePlayActivity.
  */
 public class GamePlayController {
-    private ConnectedThread connectedThread;
+    private ConnectedThread connectedThread; //this is for communicating with other phone using bluetooth socket, and corresponding input-output streams.
 
     public GamePlayController() {
 
@@ -33,16 +33,22 @@ public class GamePlayController {
         getConnectedThread().write(message);
     }
 
+    /*
+        Saves commitment of the player to Parse server.
+     */
     public void doSaveCommitment(Context context, ParseConnection parseConnection, String commitment) {
         DialogFactory dialogFactory = DialogFactory.getInstance();
-        GameResult gameResult = (GameResult) parseConnection.obtainObject("GameResult", "gameNo", parseConnection.getCurrentGameNo());
-        GameSettings gameSettings = GameSettings.loadFromPreferences(context);
+        GameResult gameResult = (GameResult) parseConnection.obtainObject("GameResult", "gameNo", parseConnection.getCurrentGameNo()); //According to game number, get
+                                                                                                                                    // game result object which points
+                                                                                                                                    //to a specific row in the database.
+        GameSettings gameSettings = GameSettings.loadFromPreferences(context);  //obtain game settings from Preferences.
 
+        //Get name and surname of the player for commitment.
         SharedPreferences sp = context.getSharedPreferences(Keys.PLAYER_INFO_PREFERENCES, Context.MODE_PRIVATE);
         String name = sp.getString(Keys.PLAYER_NAME, "DEFAULT");
         String surname = sp.getString(Keys.PLAYER_SURNAME, "DEFAULT");
 
-        if (SocketSingleton.getInstance().isHosted()) {
+        if (SocketSingleton.getInstance().isHosted()) {//Check whether it is first player (Hosted) or second player (Client).
             gameResult.setP1Name(name);
             gameResult.setP1Surname(surname);
             gameResult.setP1Commitment(commitment);
@@ -52,6 +58,7 @@ public class GamePlayController {
             gameResult.setP2Commitment(commitment);
         }
 
+        //We not only save commitment values, but we also save game results to the server.
         gameResult.setMaximumStepNumber(gameSettings.getMaximumStepNumber());
         gameResult.setRatio(gameSettings.getRatio());
         gameResult.setInitialTotal(gameSettings.getInitialTotal());
@@ -59,35 +66,42 @@ public class GamePlayController {
         gameResult.setCommitmentType(gameSettings.getCommitmentType());
         gameResult.setPunishment(gameSettings.getPunishment());
 
+        //Initializes background-job-dialog while saving is proceeding.
         BackgroundJobDialog backgroundJobDialog = (BackgroundJobDialog) dialogFactory.create(DialogFactory.DIALOG_BACKGROUND_JOB);
         ((TextView) backgroundJobDialog.findViewById(R.id.backgroundJobTextView)).setText("Saving Commitment...");
 
         parseConnection.removeAllObservers();
         parseConnection.addObserver(backgroundJobDialog);
-        parseConnection.saveGameResultForCommitment(context, gameResult);
+        parseConnection.saveGameResultForCommitment(context, gameResult); //In this step, only game settings and commitment values together with name, and
+                                                                            // surname of the player are saved.
     }
 
+    //Dialog which prevents you do anything when the turn is not yours, and disappears when the turn is yours.
     public void doPrepareTurnDialog(Context context) {
         GamePlayActivity.MessageHandler messageHandler = getConnectedThread().getMessageHandler();
         DialogFactory dialogFactory = DialogFactory.getInstance();
         dialogFactory.setContext(context);
         BackgroundJobDialog dialog = (BackgroundJobDialog) dialogFactory.create(DialogFactory.DIALOG_BACKGROUND_JOB);
-        messageHandler.addObserver(dialog);
+        messageHandler.addObserver(dialog);//Bind messageHandler with dialog. When the turn is yours, message handler will update its state, and dialog will become
+        //invisible. When the turn is not yours, message handler will also update its state, and dialog will become visible to prevent you to do something on screen.
     }
 
+    //Handle pass choice.
     public void doPass(Button button) {
         GamePlayActivity.MessageHandler messageHandler = getConnectedThread().getMessageHandler();
-        messageHandler.setCurrentState(GamePlayActivity.MessageHandler.STATE_WAITING);
-        getConnectedThread().write(button.getText().toString().toLowerCase());
-        doUpdateGameDataGridLayout(button.getContext());
+        messageHandler.setCurrentState(GamePlayActivity.MessageHandler.STATE_WAITING); //the player's state becomes waiting as he chooses to pass turn to other player.
+        getConnectedThread().write(button.getText().toString().toLowerCase()); //Also we have to send this message to other phone.
+        doUpdateGameDataGridLayout(button.getContext());    //Also we need to update game data (currentStepNumber increased, payoffs changed, currentTotal increased.)
     }
 
+    //Handle stop choice.
     public void doStop(Button button, ParseConnection parseConnection) {
         GamePlayActivity.MessageHandler messageHandler = getConnectedThread().getMessageHandler();
-        messageHandler.setCurrentState(GamePlayActivity.MessageHandler.STATE_FINISHING);
-        doDisplayGameResult1(button.getContext(), parseConnection);
+        messageHandler.setCurrentState(GamePlayActivity.MessageHandler.STATE_FINISHING); //Game is finished.
+        doDisplayGameResult1(button.getContext(), parseConnection); //Display game result for player 1.
     }
 
+    //When a player decides to "Pass", View containing game data (currentStepNumber, payoffs, currentTotal) has to be updated accordingly.
     public void doUpdateGameDataGridLayout(Context context) {
         final int precision = 3;
         GamePlayActivity activity = (GamePlayActivity) context;
@@ -125,32 +139,36 @@ public class GamePlayController {
         t4.setText(stringCP2P + activity.shrinkDoubleAsStrings("" + updatedP2Payoff, precision));
     }
 
+    //Display game result for player 1. It doesn't only display the game results, but it also sends all the game result information to server.
     private void doDisplayGameResult1(Context context, ParseConnection parseConnection) {
         DialogFactory dialogFactory = DialogFactory.getInstance();
         dialogFactory.setContext(context);
 
         final GameResultDialog gameResultDialog = (GameResultDialog) dialogFactory.create(DialogFactory.DIALOG_GAME_RESULT);
-        final GameResult gameResult = (GameResult) parseConnection.obtainObject("GameResult", "gameNo", parseConnection.getCurrentGameNo());
-        gameResultDialog.injectContentAndCompleteGameResult(gameResult);
+        final GameResult gameResult = (GameResult) parseConnection.obtainObject("GameResult", "gameNo", parseConnection.getCurrentGameNo()); //Obtain related row.
+        gameResultDialog.injectContentAndCompleteGameResult(gameResult); //all data in the gameResult object will be "injected" into GUI object for presentation.
 
         final Dialog dialog = dialogFactory.create(DialogFactory.DIALOG_BACKGROUND_JOB);
-        ((TextView) dialog.findViewById(R.id.backgroundJobTextView)).setText("Sending Results To Server...");
+        ((TextView) dialog.findViewById(R.id.backgroundJobTextView)).setText("Sending Results To Server..."); //initializes a background dialog and display it until
+                                                                                                            //results are saved on the server side.
         dialog.show();
 
         gameResult.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
                 if (e == null) {
-                    dialog.dismiss();
-                    gameResultDialog.show();
-                    getConnectedThread().write("stop");
+                    dialog.dismiss(); //close the dialog.
+                    gameResultDialog.show(); //display the game result dialog.
+                    getConnectedThread().write("stop"); // send other phone that the results are saved in the Parse server so that other phone can call "doDisplayGameResult2()" method.
                 } else {
-                    ((TextView) dialog.findViewById(R.id.backgroundJobTextView)).setText(e.getLocalizedMessage());
+                    ((TextView) dialog.findViewById(R.id.backgroundJobTextView)).setText(e.getLocalizedMessage()); //Error message is displayed if anything goes wrong.
                 }
             }
         });
     }
 
+    //Display game result for player 2. Unlike the method above, this method only retreives the game result from server, and displays it accordingly.
+    //This method waits for the method above to be completed.
     public void doDisplayGameResult2(Context context, ParseConnection parseConnection) {
         DialogFactory dialogFactory = DialogFactory.getInstance();
         dialogFactory.setContext(context);

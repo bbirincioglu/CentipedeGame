@@ -10,7 +10,7 @@ import java.io.OutputStream;
 import java.util.HashMap;
 
 /**
- * Created by bbirincioglu on 3/11/2016.
+ * The class which communicates (reads from socket, and writes into socket) with the other device using bluetoothSocket, input and output streams.
  */
 public class ConnectedThread extends Thread {
     private Activity activity;
@@ -21,14 +21,14 @@ public class ConnectedThread extends Thread {
 
     public ConnectedThread(Activity activity, BluetoothSocket bluetoothSocket, GamePlayActivity.MessageHandler messageHandler) {
         setActivity(activity);
-        setMessageHandler(messageHandler);
+        setMessageHandler(messageHandler); //MessageHandler which recevies messages from this thread and sends them to main thread.
         setBluetoothSocket(bluetoothSocket);
         InputStream temp1 = null;
         OutputStream temp2 = null;
 
         try {
-            temp1 = bluetoothSocket.getInputStream();
-            temp2 = bluetoothSocket.getOutputStream();
+            temp1 = bluetoothSocket.getInputStream(); //Get input stream from socket for reading.
+            temp2 = bluetoothSocket.getOutputStream(); //Get output stream from socket for writing.
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -37,6 +37,9 @@ public class ConnectedThread extends Thread {
         outputStream = temp2;
     }
 
+    //This method constantly checkes whether anything is written to socket, and read them if any. The messages that are read by the input stream
+    // are of type bytes. This message has to be sent to main thread in order for it to be displayed in GUI or for other processes. Thus, we use
+    //message handler to send message from this thread to main thread.
     public void run() {
         byte[] buffer = new byte[1024];
         int bytes;
@@ -56,6 +59,8 @@ public class ConnectedThread extends Thread {
         }
     }
 
+    //Write in to socket using output stream. If message to be written is of type String, just convert it into byte array. If it is of type HashMap (I used
+    //this data structure for sending Game Settings from Hosted Player's phone to Client Player phone), use object output stream to convert it into byte array.
     public void write(Object message) {
         System.out.println("IT IS IN THE WRITE.");
         byte[] messageAsByteArray = null;

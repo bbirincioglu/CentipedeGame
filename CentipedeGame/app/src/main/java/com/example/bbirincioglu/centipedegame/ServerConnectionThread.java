@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 /**
- * Created by bbirincioglu on 3/2/2016.
+ * This class is for listening Bluetooth Connection Requests coming from client side. This class constantly checks whether there is another phone
+ * which wants to connect this so called "server" or "host".
  */
 public class ServerConnectionThread extends Thread implements ConnectionThread {
     public static final String UUID_STRING = "64a4c657-722c-4c25-828e-067dabef1724";
@@ -39,6 +40,7 @@ public class ServerConnectionThread extends Thread implements ConnectionThread {
     }
 
     public void run() {
+        //In order to do any GUI related stuff, we need to call runOnUiThread() method. Android doesn't allow us to update GUI from a thread other than main thread.
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -48,14 +50,14 @@ public class ServerConnectionThread extends Thread implements ConnectionThread {
 
         while (true) {
             try {
-                setBluetoothSocket(getBluetoothServerSocket().accept());
+                setBluetoothSocket(getBluetoothServerSocket().accept()); //Constantly checks whether there is another phone trying to connect this phone's socket.
                 SocketSingleton.getInstance().setSocket(getBluetoothSocket());
             } catch (Exception e) {
                 e.printStackTrace();
                 break;
             }
 
-            if (getBluetoothSocket() != null) {
+            if (getBluetoothSocket() != null) { //If it is not null, this means some other phone joined the game.
                 //BluetoothGameActivity.bluetoothSocket = getBluetoothSocket();
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
@@ -66,7 +68,7 @@ public class ServerConnectionThread extends Thread implements ConnectionThread {
 
                 cancel();
                 break;
-            } else {
+            } else {//If socket is null, this means some didn't or couldn't joined the game.
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

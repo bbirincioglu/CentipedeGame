@@ -13,43 +13,51 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 /**
- * Created by bbirincioglu on 3/6/2016.
+ * Controller class for SettingsActivity. It also has all the listeners for GUI objects of the SettingsActivity.
  */
 public class SettingsController implements TextWatcher, View.OnClickListener, SeekBar.OnSeekBarChangeListener, RadioButton.OnCheckedChangeListener {
     private Activity activity;
-    private ArrayList<EditText> editTexts;
+    private ArrayList<EditText> editTexts; //All the edit texts of SettingsActivity.
 
     public SettingsController(Context context) {
         this.editTexts = new ArrayList<EditText>();
         setActivity((Activity) context);
     }
 
+    //Listener for Radio buttons.
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         int id = buttonView.getId();
         Activity activity = getActivity();
+
+        //Get radio buttons.
         RadioButton closedRadioButton = ((RadioButton) activity.findViewById(R.id.closedCommitmentRadioButton));
         RadioButton openRadioButton = ((RadioButton) activity.findViewById(R.id.openCommitmentRadioButton));
 
+        //Detach this listener.
         closedRadioButton.setOnCheckedChangeListener(null);
         openRadioButton.setOnCheckedChangeListener(null);
 
+        //check value
         if (isChecked) {
             closedRadioButton.setChecked(false);
             openRadioButton.setChecked(false);
         }
 
+        //Attach this listener again.
         buttonView.setChecked(true);
         closedRadioButton.setOnCheckedChangeListener(this);
         openRadioButton.setOnCheckedChangeListener(this);
     }
 
+
+    //ButtonListener
     @Override
     public void onClick(View v) {
         int id = v.getId();
         Activity activity = getActivity();
 
-        if (id == R.id.settingsSaveButton) {
+        if (id == R.id.settingsSaveButton) { //If save button is clicked, obtain the all inputs determined by the user, and save them into preferences.
             System.out.println("IN THE SAVE BUTTON");
             String maximumStepNum = ((TextView) activity.findViewById(R.id.maximumStepNumberTextView)).getText().toString();
             String ratio = ((EditText) activity.findViewById(R.id.ratioEditText)).getText().toString();
@@ -68,6 +76,7 @@ public class SettingsController implements TextWatcher, View.OnClickListener, Se
         }
     }
 
+    //Progress Bar Listener for determining maximum step number.
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         seekBar.setOnSeekBarChangeListener(null);
@@ -103,9 +112,10 @@ public class SettingsController implements TextWatcher, View.OnClickListener, Se
 
     }
 
+    //Listener for edit texts.
     @Override
     public void afterTextChanged(Editable s) {
-        addOrRemoveListenersFromEditTexts("remove");
+        addOrRemoveListenersFromEditTexts("remove"); //Firstly remove all listeners from edit texts.
         EditText editTextFocused = null;
         ArrayList<EditText> editTexts = getEditTexts();
         int size = editTexts.size();
@@ -113,15 +123,15 @@ public class SettingsController implements TextWatcher, View.OnClickListener, Se
         for (int i = 0; i < size; i++) {
             EditText editText = editTexts.get(i);
 
-            if (editText.hasFocus()) {
+            if (editText.hasFocus()) { //Find the edit text which is clicked, or typed by the user.
                 editTextFocused = editTexts.get(i);
                 break;
             }
         }
 
         if (editTextFocused != null) {
-            String text = s.toString();
-            int id = editTextFocused.getId();
+            String text = s.toString(); //Get text typed by the user.
+            int id = editTextFocused.getId(); //Get id of the edit text, and apply different validations for each edit text.
 
             if (id == R.id.ratioEditText) {
                 String validatedRatio = validateRatio(text);
@@ -145,57 +155,7 @@ public class SettingsController implements TextWatcher, View.OnClickListener, Se
         addOrRemoveListenersFromEditTexts("add");
     }
 
-    /*private String fixOtherRatio(String otherRatio) {
-        String fixedOtherRatio = "";
-        int length = otherRatio.length();
-
-        if (length > 10) {
-            char character = otherRatio.charAt(7);
-
-            if (character == '9') {
-                fixedOtherRatio = otherRatio.substring(0, 1);
-                int index = -2;
-
-                for (int i = 1; i < length; i++) {
-                    char charAtI = otherRatio.charAt(i);
-                    index++;
-
-                    if (charAtI == '9') {
-                        fixedOtherRatio += charAtI;
-                        break;
-                    } else {
-                        fixedOtherRatio += charAtI;
-                    }
-                }
-
-                String fixer = "0.";
-
-                for (int i = 0; i < index; i++) {
-                    fixer += '0';
-                }
-
-                fixer += '1';
-                fixedOtherRatio = String.valueOf(Double.valueOf(fixedOtherRatio) + Double.valueOf(fixer));
-            } else if (character == '0') {
-                fixedOtherRatio = otherRatio.substring(0, 1);
-
-                for (int i = 1; i < length; i++) {
-                    char charAtI = otherRatio.charAt(i);
-
-                    if (charAtI == '0') {
-                        break;
-                    } else {
-                        fixedOtherRatio += charAtI;
-                    }
-                }
-            }
-        } else {
-            fixedOtherRatio = otherRatio;
-        }
-
-        return fixedOtherRatio;
-    }*/
-
+    //It takes "ratio" as argument, and clears all the non-numeric characters from "ratio", and returns "validated" form of it.
     private String validateRatio(String ratio) {
         String validatedRatio = "0.";
         String control = "0123456789";
@@ -212,6 +172,8 @@ public class SettingsController implements TextWatcher, View.OnClickListener, Se
         return validatedRatio;
     }
 
+    //It takes "initialTotal" as argument, and clears all the non-numeric characters from "initialTotal". In addition to that, it also checks whether
+    //first character is zero or not. If it is zero, it doesn't include that zero to "validatedInitialTotal".
     private String validateInitialTotal(String initialTotal) {
         String validatedInitialTotal = "";
         String control = "0123456789";
@@ -234,6 +196,7 @@ public class SettingsController implements TextWatcher, View.OnClickListener, Se
         return validatedInitialTotal;
     }
 
+    //It ensures that first character is "-" sign, and rest is numeric.
     public String validatePunishment(String punishment) {
         String validatedPunishment = "-";
         String control = "0123456789";
@@ -274,6 +237,7 @@ public class SettingsController implements TextWatcher, View.OnClickListener, Se
         getEditTexts().remove(editText);
     }
 
+    //Used to find edit text with given id.
     private EditText findEditText(int id) {
         EditText wanted = null;
         ArrayList<EditText> editTexts = getEditTexts();
@@ -288,6 +252,7 @@ public class SettingsController implements TextWatcher, View.OnClickListener, Se
         return wanted;
     }
 
+    //Used to add or remove listeners from edit texts.
     private void addOrRemoveListenersFromEditTexts(String addOrRemove) {
         ArrayList<EditText> editTexts = getEditTexts();
 

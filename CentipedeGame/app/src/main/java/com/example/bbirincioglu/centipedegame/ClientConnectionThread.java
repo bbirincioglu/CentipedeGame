@@ -8,16 +8,16 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 /**
- * Created by bbirincioglu on 3/2/2016.
+ * Thread handling client connection to hosted connection.
  */
 public class ClientConnectionThread extends Thread implements ConnectionThread {
-    public static final String UUID_STRING = "64a4c657-722c-4c25-828e-067dabef1724";
+    public static final String UUID_STRING = "64a4c657-722c-4c25-828e-067dabef1724"; //random UUID_STRING created by UUID.randomUUID().toString()
     public static UUID UUID;
     private final BluetoothDevice bluetoothDevice;
-    private final BluetoothSocket bluetoothSocket;
+    private final BluetoothSocket bluetoothSocket;  //bluetooth socket for sending and receiving messages.
 
-    private ArrayList<ConnectionThreadObserver> observers;
-    private int currentStatus;
+    private ArrayList<ConnectionThreadObserver> observers; //observers that observe this thread.
+    private int currentStatus;  //status of this thread.
     private Activity activity;
 
     public ClientConnectionThread(Activity activity, BluetoothDevice bluetoothDevice) {
@@ -26,12 +26,12 @@ public class ClientConnectionThread extends Thread implements ConnectionThread {
         BluetoothSocket temp = null;
 
         try {
-            temp = getBluetoothDevice().createRfcommSocketToServiceRecord(UUID);
+            temp = getBluetoothDevice().createRfcommSocketToServiceRecord(UUID); //get socket.
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        bluetoothSocket = temp;
+        bluetoothSocket = temp; //store socket.
         setObservers(new ArrayList<ConnectionThreadObserver>());
         setCurrentStatus(ConnectionThread.STATUS_INITIALIZED);
         this.activity = activity;
@@ -40,9 +40,10 @@ public class ClientConnectionThread extends Thread implements ConnectionThread {
     @Override
     public void run() {
         BluetoothGameController controller = ((BluetoothGameActivity) getActivity()).getController();
-        controller.doCancelDiscovery();
+        controller.doCancelDiscovery(); //discovery is cancelled because device to connect is selected from the list.
 
         try {
+            //to update GUI from another thread you either have to use AsyncTask class or runOnUIThread() method of activity.
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -50,12 +51,12 @@ public class ClientConnectionThread extends Thread implements ConnectionThread {
                 }
             });
 
-            getBluetoothSocket().connect();
-            SocketSingleton.getInstance().setSocket(getBluetoothSocket());
+            getBluetoothSocket().connect(); // try to connect.
+            SocketSingleton.getInstance().setSocket(getBluetoothSocket()); //store the socket in the Singleton object to be used during the game play.
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    setCurrentStatus(ConnectionThread.STATUS_CONNECTED);
+                    setCurrentStatus(ConnectionThread.STATUS_CONNECTED); //connection is completed, change the status.
                 }
             });
         } catch (Exception e) {
@@ -63,14 +64,12 @@ public class ClientConnectionThread extends Thread implements ConnectionThread {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    setCurrentStatus(ConnectionThread.STATUS_CONNECTION_FAILED);
+                    setCurrentStatus(ConnectionThread.STATUS_CONNECTION_FAILED); //connection is failed, cancel thread.
                 }
             });
             cancel();
             return;
         }
-
-        //controller.doHandleBluetoothSocket(getBluetoothSocket());
     }
 
     public BluetoothDevice getBluetoothDevice() {

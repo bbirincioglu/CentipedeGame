@@ -7,7 +7,7 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 
 /**
- * Created by bbirincioglu on 3/1/2016.
+ * Controller class of BluetoothGameActivity.
  */
 public class BluetoothGameController {
     private BluetoothHandler bluetoothHandler;
@@ -28,28 +28,27 @@ public class BluetoothGameController {
     }
 
     public void doListPairedDevices(Context context) {
-        getBluetoothHandler().listPairedDevices(context);
-        //bluetoothHandler.discoverDevices(context);
+        getBluetoothHandler().listPairedDevices(context); //list devices that are already paired.
     }
 
     public void doDiscoverDevices(Context context) {
-        getBluetoothHandler().discoverDevices(context);
+        getBluetoothHandler().discoverDevices(context); //discover new devices and add them to dialog which displays already paired devices.
     }
 
-    public void doOpenClientConnection(Activity activity, BluetoothDevice bluetoothDevice) { // It is actually doConnect();
+    public void doOpenClientConnection(Activity activity, BluetoothDevice bluetoothDevice) {
         System.out.println("BLUETOOTHDEVICE INFO: " + bluetoothDevice.toString());
         setClientConnectionThread(new ClientConnectionThread(activity, bluetoothDevice));
         getClientConnectionThread().addObserver(((BluetoothGameActivity) activity).getBackgroundJobDialog());
-        getClientConnectionThread().start();
+        getClientConnectionThread().start();    //Start thread which handles client connection.
     }
 
     public void doOpenServerConnection(Activity activity, BluetoothAdapter bluetoothAdapter) {
         setServerConnectionThread(new ServerConnectionThread(activity, bluetoothAdapter));
-        getServerConnectionThread().start();
+        getServerConnectionThread().start();    //Start thread which handles hosted (server) connection.
     }
 
     public void doCancelDiscovery() {
-        getBluetoothHandler().cancelDiscovery();
+        getBluetoothHandler().cancelDiscovery(); //Finalize device discovery.
     }
 
     public ServerConnectionThread getServerConnectionThread() {

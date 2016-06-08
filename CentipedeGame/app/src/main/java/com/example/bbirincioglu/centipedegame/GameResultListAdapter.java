@@ -11,7 +11,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 /**
- * Created by bbirincioglu on 3/18/2016.
+ * Another adapter for displaying game results in a list view with custom layout. Each row in the listView is constructed via getView() method.
+ * The instance of this class is used in the GameResultsActivity.
  */
 public class GameResultListAdapter extends ArrayAdapter<GameResult> {
     private Context context;
@@ -23,6 +24,7 @@ public class GameResultListAdapter extends ArrayAdapter<GameResult> {
         this.gameResults = gameResults;
     }
 
+    //Each content of game result in the gameResults arrayList is inserted into a GUI object (View row) via this method.
     public View getView(int position, View convertView, ViewGroup parent) {
         View row = null;
         LayoutInflater inflater = ((LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE));

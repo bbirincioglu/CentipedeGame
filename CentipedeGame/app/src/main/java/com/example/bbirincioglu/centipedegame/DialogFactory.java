@@ -4,7 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 
 /**
- * Created by bbirincioglu on 3/3/2016.
+ * Factory implemented by Singleton Design Pattern, and creates different dialog types.
  */
 public class DialogFactory {
     public static final String DIALOG_PLAYER_INFO = "dialogPlayerInfo";

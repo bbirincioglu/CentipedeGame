@@ -1,7 +1,7 @@
 package com.example.bbirincioglu.centipedegame;
 
 /**
- * Created by bbirincioglu on 3/11/2016.
+ * The interface implemented by some GUI classes which listens classes implementing ConnectionThread interface.
  */
 public interface ConnectionThreadObserver {
     public void update(ConnectionThread connectionThread);

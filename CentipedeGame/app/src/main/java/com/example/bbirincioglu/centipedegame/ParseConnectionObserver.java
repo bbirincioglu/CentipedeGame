@@ -1,7 +1,7 @@
 package com.example.bbirincioglu.centipedegame;
 
 /**
- * Created by bbirincioglu on 3/6/2016.
+ * Interface implemented by GUI objects which observer instance of ParseConnection class.
  */
 public interface ParseConnectionObserver {
     public void update(ParseConnection parseConnection);

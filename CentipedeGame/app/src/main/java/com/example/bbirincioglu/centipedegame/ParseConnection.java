@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by bbirincioglu on 3/6/2016.
+ * The class providing all Parse Server CRUD operations.
  */
 public class ParseConnection {
     public static final int STATE_NO_BACKGROUND_JOB = -1;
@@ -51,7 +51,12 @@ public class ParseConnection {
         return instance;
     }
 
-    public void obtainObjects(String className) {//USED FOR GAMERESULTS ACTIVITY
+    /*
+        Method takes "className" (the name of the table in database) as argument, and gets the all rows in that table with each row being an instance of "className".
+        It also updates this object's state so that corresponding background dialog appears / disappears on the screen.
+        This method works asynchronously with main thread.
+     */
+    public void obtainObjects(String className) {
         setCurrentState(STATE_BACKGROUND_JOB_STARTED);
         ParseQuery query = ParseQuery.getQuery(className);
         query.findInBackground(new FindCallback() {
@@ -81,6 +86,11 @@ public class ParseConnection {
         });
     }
 
+    /*
+        It takes className (name of the table), columnName in the table, and columnValue stored in that columnName, and returns corresponding row. In other words,
+        this method returns a row (ParseObject) which belongs to "className" table, and has a columnName.value = uniqueColumnValue. This method works synchronously
+        with main thread.
+     */
     public ParseObject obtainObject(String className, String columnName, Object uniqueColumnValue) {
         ParseObject object = null;
         ParseQuery query = ParseQuery.getQuery(className);
@@ -147,6 +157,8 @@ public class ParseConnection {
         }
     }
 
+    //It creates an empty row with specific game number value in the GameResult table whenever a new game is started.
+    //This method also works asynchronously.
     public void createEmptyGameResult() {
         setCurrentState(STATE_BACKGROUND_JOB_STARTED);
         final GameResult gr = new GameResult();
@@ -175,6 +187,10 @@ public class ParseConnection {
         new Thread(new MyRunnable()).start();
     }
 
+    /*
+        When a player commits, the commitment value is sent to the server via this method. After the commitment value is sent, this method also sends message
+        to other phone to inform it about this commitment.
+     */
     public void saveGameResultForCommitment(Context context, final GameResult gameResult) {
         setCurrentState(STATE_BACKGROUND_JOB_STARTED);
         setMyCommitmentSaved(true);

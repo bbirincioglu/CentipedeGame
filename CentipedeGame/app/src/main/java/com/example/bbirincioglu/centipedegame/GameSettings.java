@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 
 /**
- * Created by bbirincioglu on 3/6/2016.
+ * The class for storing settings of the game, and retreiving from android's built-in Preferences using KEYS array.
  */
 public class GameSettings implements Serializable {
     public static final String[] KEYS = new String[]{Keys.MAXIMUM_STEP_NUMBER, Keys.RATIO, Keys.INITIAL_TOTAL, Keys.MULTIPLICATOR, Keys.COMMITMENT_TYPE, Keys.PUNISHMENT};
@@ -29,9 +29,10 @@ public class GameSettings implements Serializable {
         this.punishment = punishment;
     }
 
+    //Load values from Preferences.
     public static GameSettings loadFromPreferences(Context context) {
-        SharedPreferences sp = context.getSharedPreferences(Keys.SETTINGS_PREFERENCES, Context.MODE_PRIVATE);
-        String maximumStepNumber = sp.getString(Keys.MAXIMUM_STEP_NUMBER, "10");
+        SharedPreferences sp = context.getSharedPreferences(Keys.SETTINGS_PREFERENCES, Context.MODE_PRIVATE); //Keys.SETTINGS_PREFERENCES is the name of the Preferences.
+        String maximumStepNumber = sp.getString(Keys.MAXIMUM_STEP_NUMBER, "10"); //10 is default value in case nothing is found in the Preferences.
         String ratio = sp.getString(Keys.RATIO, "0.8");
         String initialTotal = sp.getString(Keys.INITIAL_TOTAL, "100");
         String multiplicator = sp.getString(Keys.MULTIPLICATOR, "2");
@@ -40,6 +41,7 @@ public class GameSettings implements Serializable {
         return new GameSettings(context, maximumStepNumber, ratio, initialTotal, multiplicator, commitmentType, punishment);
     }
 
+    //Save values to Preferences.
     public void saveIntoPreferences() {
         SharedPreferences sp = getContext().getSharedPreferences(Keys.SETTINGS_PREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences.Editor  editor = sp.edit();
@@ -108,6 +110,7 @@ public class GameSettings implements Serializable {
         this.punishment = punishment;
     }
 
+    //Converts this object to hashMap so that it can be written in to bluetoothSocket, and sent to other player.
     public HashMap<String, String> toHashMap() {
         HashMap<String, String> hashMap = new HashMap<String, String>();
         String[] KEYS = GameSettings.KEYS;
@@ -120,6 +123,7 @@ public class GameSettings implements Serializable {
         return hashMap;
     }
 
+    //Converts hashMap representation to actual GameSettings object, and returns it.
     public static GameSettings fromHashMap(Context context, HashMap<String, String> hashMap) {
         String[] KEYS = GameSettings.KEYS;
         String maximumStepNumber = hashMap.get(KEYS[0]);

@@ -17,10 +17,12 @@ public class BluetoothHandler {
 
     public BluetoothHandler() {
         setBcReceiver(new BCReceiver());
-        getBcReceiver().getPairedDevices().addAll(BluetoothAdapter.getDefaultAdapter().getBondedDevices());
+        getBcReceiver().getPairedDevices().addAll(BluetoothAdapter.getDefaultAdapter().getBondedDevices()); //Find already bounded (paired) devices
+                                                                                                            // and add them to array list of bcReceiver.
         System.out.println("INITIAL SIZE OF: " + getBcReceiver().getPairedDevices().size());
     }
 
+    //Check whether phone supports bluetooth connection.
     public boolean isBluetoothSupported() {
         boolean result = true;
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -32,11 +34,13 @@ public class BluetoothHandler {
         return result;
     }
 
+    //Check whether bluetooth is open.
     public boolean isBluetoothEnabled() {
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         return bluetoothAdapter.isEnabled();
     }
 
+    //Check whether phone is in state discoverable.
     public boolean isDiscoverable() {
         boolean result = false;
 
@@ -47,12 +51,14 @@ public class BluetoothHandler {
         return result;
     }
 
+    //Enable bluetooth.
     public void enableBluetooth(Context context) {
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         Intent bluetoothIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
         ((Activity) context).startActivityForResult(bluetoothIntent, BLUETOOTH_SUCCESSFULL);
     }
 
+    //Make device discoverable for 300 seconds so that when discovery process has started, the device can be recognized by other device.
     public void enableDiscoverability(Context context) {
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
@@ -60,6 +66,7 @@ public class BluetoothHandler {
         ((Activity) context).startActivityForResult(discoverableIntent, DISCOVERABILITY_SUCCESSFULL);
     }
 
+    //Discovery all devices via intentFilter.
     public void discoverDevices(Context context) {
         BCReceiver bcReceiver = getBcReceiver();
         IntentFilter intentFilter = new IntentFilter();
@@ -71,55 +78,18 @@ public class BluetoothHandler {
         bluetoothAdapter.startDiscovery();
     }
 
+    //notifying bcReceiver's observers means that, any GUI object (usually dialog) that are binded to bcReceiver will update their appearance.
+    //GUI object will take all the paired devices stored in the "pairedDevices" arrayList of bcReceiver object, and display their names, IDs etc. on the dialog.
     public void listPairedDevices(Context context) {
         BCReceiver bcReceiver = getBcReceiver();
         bcReceiver.notifyObservers();
     }
 
+    //Finalize discovery.
     public void cancelDiscovery() {
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         bluetoothAdapter.cancelDiscovery();
     }
-
-    /*public BroadcastReceiver getBroadcastReceiver(Context context) {
-        final MainMenuActivity mainMenuActivity = (MainMenuActivity) context;
-
-        if (broadcastReceiver == null) {
-            broadcastReceiver = new BroadcastReceiver() {
-                @Override
-                public void onReceive(Context context, Intent intent) {
-                    String action = intent.getAction();
-
-                    System.out.println("MY NAME: " + BluetoothAdapter.getDefaultAdapter().getName() + "," + BluetoothAdapter.getDefaultAdapter().getAddress());
-
-                    if (action.equals(BluetoothAdapter.ACTION_DISCOVERY_STARTED)) {
-                        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
-                        AlertDialog dialog = dialogBuilder.setTitle("DISCOVERY STARTED").setMessage("Discovering Devices...").create();
-                        mainMenuActivity.replaceDialog(dialog);
-                    } else if (action.equals(BluetoothDevice.ACTION_FOUND)) {
-                        BluetoothDevice newDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                        System.out.println("NewDeviceName: " + newDevice.getName() + "," + newDevice.getBondState() + "," + newDevice.getAddress());
-
-                        if (getPairedDevices().contains(newDevice)) {
-                            System.out.println("Already exists.");
-                        } else {
-                            getPairedDevices().add(newDevice);
-                            System.out.println("Size" + getPairedDevices().size());
-                        }
-                    } else if (action.equals(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)) {
-                        Dialog dialog = new Dialog(context, android.R.style.Theme_Holo_Dialog);
-                        dialog.setContentView(R.layout.discovery_list_dialog);
-                        ListView discoveryListView = (ListView) dialog.findViewById(R.id.discoveryListView);
-                        DiscoveryListAdapter discoveryListAdapter = new DiscoveryListAdapter(context, R.layout.discovery_list_row, getPairedDevices());
-                        discoveryListView.setAdapter(discoveryListAdapter);
-                        mainMenuActivity.replaceDialog(dialog);
-                    }
-                }
-            };
-        }
-
-        return broadcastReceiver;
-    }*/
 
     public BCReceiver getBcReceiver() {
         return bcReceiver;

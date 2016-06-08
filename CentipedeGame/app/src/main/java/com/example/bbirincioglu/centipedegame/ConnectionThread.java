@@ -1,7 +1,7 @@
 package com.example.bbirincioglu.centipedegame;
 
 /**
- * Created by bbirincioglu on 3/11/2016.
+ * The interface implemented by ClientConnectionThread, and ServerConnectionThread
  */
 public interface ConnectionThread {
     public static final int STATUS_INITIALIZED = 0;

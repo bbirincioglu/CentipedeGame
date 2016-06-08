@@ -8,7 +8,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-
+/*
+    The first activity which contains main menu of application.
+ */
 public class MainMenuActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,17 +22,17 @@ public class MainMenuActivity extends AppCompatActivity {
         if (intent != null) {
             boolean returnFromActivity = intent.getBooleanExtra(Keys.RETURN_FROM_ACTIVITY, false);
 
-            if (!returnFromActivity) {
+            if (!returnFromActivity) { //check whether the application has just started, or we came this activity from previous activites.
                 InternetHandler internetHandler = new InternetHandler(this);
-                boolean isWifiEnabled = internetHandler.isWifiEnabled();
+                boolean isWifiEnabled = internetHandler.isWifiEnabled(); //check wifi, and mobile data because they are needed to connect Parse Server.
                 boolean isMobileDataEnabled = internetHandler.isMobileDataEnabled();
 
-                if (!isWifiEnabled && !isMobileDataEnabled) {
+                if (!isWifiEnabled && !isMobileDataEnabled) { //If none of them are available, display appropriate dialog to force user to enable one of them.
                     DialogFactory dialogFactory = DialogFactory.getInstance();
                     dialogFactory.setContext(this);
                     Dialog dialog = dialogFactory.create(DialogFactory.DIALOG_WIFI_MOBILE_DATA);
                     dialog.show();
-                } else {
+                } else { //If they are available display player info dialog so that they can enter their names, and surnames.
                     DialogFactory dialogFactory = DialogFactory.getInstance();
                     dialogFactory.setContext(this);
                     Dialog dialog = dialogFactory.create(DialogFactory.DIALOG_PLAYER_INFO);
@@ -62,6 +64,7 @@ public class MainMenuActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    //ButtonListener method for buttons on the screen.
     public void onClick(View v) {
         Button button = (Button) v;
         int buttonID = button.getId();

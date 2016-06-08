@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 /**
- * Created by bbirincioglu on 3/18/2016.
+ * Class for writing game results into excel sheet.
  */
 public class Writer {
     public static final int STATE_NO_WRITING = 0;
@@ -36,9 +36,13 @@ public class Writer {
         setError(null);
     }
 
+    //Write into excel sheet with given "fileName", "sheetName", headers being the first row of sheet, and gameResults being the rest of the rows.
     public void writeExcel(String fileName, String sheetName, String[] headers, List<Object> gameResults) {
         setCurrentState(STATE_WRITING);
         //String directory = Environment.getExternalStorageDirectory() + "/Documents/";
+
+        //Anonymous class which is run by a separate thread in order to prevent response problems in user interface. In other words, writing is done in a separate
+        //thread so that user interface doesn't become unresponsive.
 
         class Run implements Runnable {
             private String fileName;
@@ -54,11 +58,11 @@ public class Writer {
             }
 
             public void run() {
-                File excelFile = new File("/sdcard/" + fileName);
-                HSSFWorkbook workbook = new HSSFWorkbook();
+                File excelFile = new File("/sdcard/" + fileName); //Create file in sd card.
+                HSSFWorkbook workbook = new HSSFWorkbook(); //Use Apache POI library classes to create workbooks, and sheets.
                 HSSFSheet sheet = workbook.createSheet(sheetName);
-                writeHeaders(sheet, headers);
-                writeGameResults(sheet, gameResults);
+                writeHeaders(sheet, headers); //Firstly, write all the headers to the first row.
+                writeGameResults(sheet, gameResults); //Then, write game results to the rest of the excel sheet.
 
         /*for (int i = 0; i < headers.length; i++) {
             sheet.autoSizeColumn(i);
@@ -69,10 +73,10 @@ public class Writer {
                         excelFile.createNewFile();
                     }
 
-                    FileOutputStream fos = new FileOutputStream(excelFile);
-                    workbook.write(fos);
-                    fos.close();
-                    ((Activity) getContext()).runOnUiThread(new Runnable() {
+                    FileOutputStream fos = new FileOutputStream(excelFile); //obtain file output stream which will be used to write into actual file.
+                    workbook.write(fos);//write workbook which is stored in the memory to actual file in the disk.
+                    fos.close(); //close output stream
+                    ((Activity) getContext()).runOnUiThread(new Runnable() { //update Writer's status, so that background-job-dialog also closes or opens.
                         @Override
                         public void run() {
                             setCurrentState(STATE_NO_WRITING);
@@ -107,13 +111,13 @@ public class Writer {
             HSSFCell cell = headerRow.createCell(i);
             cell.setCellValue(headers[i]);
 
-            if (-1 < i && i <= 1) {
+            if (-1 < i && i <= 1) {  //Style for columns containing game settings information.
                 cell.setCellStyle(gameSettingsCellStyle);
-            } else if (1 < i && i <= 5) {
+            } else if (1 < i && i <= 5) {  //Style for columns containing player 1 information.
                 cell.setCellStyle(p1CellStyle);
-            } else if (5 < i && i <= 9) {
+            } else if (5 < i && i <= 9) {  //Style for columns containing player 2 information.
                 cell.setCellStyle(p2CellStyle);
-            } else {
+            } else {  //Style for columns containing game settings information.
                 cell.setCellStyle(gameSettingsCellStyle);
             }
         }
@@ -135,13 +139,13 @@ public class Writer {
                 HSSFCell cell = row.createCell(j);
                 cell.setCellValue(cellValue);
 
-                if (-1 < j && j <= 1) {
+                if (-1 < j && j <= 1) { //Style for columns containing game settings information.
                     cell.setCellStyle(gameSettingsCellStyle);
-                } else if (1 < j && j <= 5) {
+                } else if (1 < j && j <= 5) { //Style for columns containing player 1 information.
                     cell.setCellStyle(p1CellStyle);
-                } else if (5 < j && j <= 9) {
+                } else if (5 < j && j <= 9) {  //Style for columns containing player 2 information.
                     cell.setCellStyle(p2CellStyle);
-                } else {
+                } else { //Style for columns containing game settings information.
                     cell.setCellStyle(gameSettingsCellStyle);
                 }
 

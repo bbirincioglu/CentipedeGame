@@ -15,7 +15,10 @@ import android.widget.TextView;
 import com.parse.ParseObject;
 
 import java.util.ArrayList;
-
+/*
+    The class for obtaining game results from Parse servers, and display them in a List View. Then, the user is allowed to extract them into excel format by clicking
+    a button. It implements ParseConnectionObserver because it displays a waiting dialog to the user until, game results are fully obtained from the server.
+ */
 public class GameResultsActivity extends AppCompatActivity implements ParseConnectionObserver {
     private GameResultsController gameResultsController;
     private ArrayList<Dialog> dialogs;
@@ -25,12 +28,14 @@ public class GameResultsActivity extends AppCompatActivity implements ParseConne
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_results);
         setDialogs(new ArrayList<Dialog>());
-        ParseObject.registerSubclass(GameResult.class);
+        ParseObject.registerSubclass(GameResult.class); //Introduce GameResult class to Parse Servers for recognition.
 
         setGameResultsController(new GameResultsController());
         DialogFactory dialogFactory = DialogFactory.getInstance();
         dialogFactory.setContext(this);
-        dialogFactory.create(DialogFactory.DIALOG_PASSWORD).show();
+        dialogFactory.create(DialogFactory.DIALOG_PASSWORD).show(); //This section of the application is protected via password. In order to see all the game results
+                                                                    //user has to enter correct password. Thus, we first display a password dialog, and check whether
+                                                                    // he typed correct password or not.
         updateButtonSizes(0.45, 0);
     }
 
@@ -89,10 +94,11 @@ public class GameResultsActivity extends AppCompatActivity implements ParseConne
         } else if (currentState == ParseConnection.STATE_BACKGROUND_JOB_STARTED) {
 
         } else if (currentState == ParseConnection.STATE_BACKGROUND_JOB_FINISHED) {
-            ListView listView = (ListView) findViewById(R.id.gameResultsListView);
-            ArrayList<GameResult> gameResultList = (ArrayList) parseConnection.getObjects();
-            GameResultListAdapter adapter = new GameResultListAdapter(this, R.layout.game_result_list_row, gameResultList);
-            listView.setAdapter(adapter);
+            ListView listView = (ListView) findViewById(R.id.gameResultsListView); //When the game results are fully obtained, create a list view in which game results
+                                                                                    // are displayed.
+            ArrayList<GameResult> gameResultList = (ArrayList) parseConnection.getObjects();    //Get the game results.
+            GameResultListAdapter adapter = new GameResultListAdapter(this, R.layout.game_result_list_row, gameResultList); // Create the adapter for list view.
+            listView.setAdapter(adapter); //bind adapter to list view.
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -101,7 +107,7 @@ public class GameResultsActivity extends AppCompatActivity implements ParseConne
                 }
             });
 
-            adapter.notifyDataSetChanged();
+            adapter.notifyDataSetChanged(); //notifies the GUI object (list view) for updating its appearance.
         }
     }
 
@@ -113,6 +119,7 @@ public class GameResultsActivity extends AppCompatActivity implements ParseConne
         new ActivitySwitcher().fromPreviousToNext(this, MainMenuActivity.class, bundle, true);
     }
 
+    //ButtonListener method for "Get Results", and "Save Results" buttons.
     public void onClick(View v) {
         int buttonID = v.getId();
         GameResultsController controller = getGameResultsController();

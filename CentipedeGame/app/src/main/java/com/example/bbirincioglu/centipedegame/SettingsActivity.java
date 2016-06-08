@@ -13,7 +13,9 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
-
+/*
+    The class for displaying, changing and storing Game Settings.
+ */
 public class SettingsActivity extends AppCompatActivity {
     private SettingsController controller;
 
@@ -24,13 +26,14 @@ public class SettingsActivity extends AppCompatActivity {
         setController(new SettingsController(this));
         DialogFactory dialogFactory = DialogFactory.getInstance();
         dialogFactory.setContext(this);
-        dialogFactory.create(DialogFactory.DIALOG_PASSWORD).show();
+        dialogFactory.create(DialogFactory.DIALOG_PASSWORD).show(); //This section of the application requires password, thus we display password dialog.
         initialize();
     }
 
     private void initialize() {
         SettingsController controller = getController();
-        GameSettings settings = GameSettings.loadFromPreferences(this);
+        GameSettings settings = GameSettings.loadFromPreferences(this); //Receive GameSettings object from Preferences, and insert values into GUI objects such as
+                                                                        //TextViews, EditTexts, RadioButtons etc...
         String maximumStepNumber = settings.getMaximumStepNumber();
         String ratio = settings.getRatio();
         String initialTotal = settings.getInitialTotal();
@@ -109,6 +112,7 @@ public class SettingsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    //Returns to main activity when the back button is pressed.
     @Override
     public void onBackPressed() {
         super.onBackPressed();

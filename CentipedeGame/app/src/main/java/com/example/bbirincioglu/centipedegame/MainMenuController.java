@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Set;
 
 /**
- * Created by bbirincioglu on 2/28/2016.
+ * Controller for Main Menu.
  */
 public class MainMenuController {
     private static MainMenuController instance;
@@ -33,6 +33,7 @@ public class MainMenuController {
         return instance;
     }
 
+    //If devices discoverability is not enabled, enable it if device does support such feature, else display informative message "Your device doesn't...".
     public void doEnableDiscoverability(Context context) {
         BluetoothHandler bluetoothHandler = getBluetoothHandler();
 
@@ -47,10 +48,7 @@ public class MainMenuController {
         }
     }
 
-    public void listPairedDevices(Set<BluetoothDevice> bluetoothDevices) {
-        System.out.println("IN THE LIST PAIRED DEVICES.");
-    }
-
+    //Switch from MainMenuActivity to BluetoothGameActivity, and animate related button while switching.
     public void doBluetoothGameActivity(View v) {
         int invalid = AnimationHandler.INVALID;
         long animationDuration = getAnimationHandler().animateOn(v, new int[]{R.anim.fade_out, R.anim.scale_up}, invalid, invalid, invalid);
@@ -63,6 +61,7 @@ public class MainMenuController {
         }, (long) (animationDuration / 1.2));
     }
 
+    //Switch from MainMenuActivity to SettingsActivity, and animate related button while switching.
     public void doSettingsActivity(View v) {
         int invalid = AnimationHandler.INVALID;
         long animationDuration = getAnimationHandler().animateOn(v, new int[]{R.anim.fade_out, R.anim.scale_up}, invalid, invalid, invalid);
@@ -75,6 +74,7 @@ public class MainMenuController {
         }, (long) (animationDuration / 1.2));
     }
 
+    //Switch from MainMenuActivity to GameResultsActivity, and animate related button while switching.
     public void doGameResultsActivity(View v) {
         int invalid = AnimationHandler.INVALID;
         long animationDuration = getAnimationHandler().animateOn(v, new int[]{R.anim.fade_out, R.anim.scale_up}, invalid, invalid, invalid);
@@ -87,6 +87,7 @@ public class MainMenuController {
         }, (long) (animationDuration / 1.2));
     }
 
+    //Close the game.
     public void doExitGame(Context context) {
         ((Activity) context).finish();
     }
@@ -114,6 +115,9 @@ public class MainMenuController {
     public void setBluetoothHandler(BluetoothHandler bluetoothHandler) {
         this.bluetoothHandler = bluetoothHandler;
     }
+
+    //Check whether player correctly enters his name, and surname. If they are entered correctly, then save them into a preference with name
+    //Keys.PLAYER_INFO_PREFERENCES. Otherwise, display error message.
 
     public void doCheckPlayerInfo(PlayerInfoDialog dialog, String nameSurname) {
         TextView errorMessageTextView = (TextView) dialog.findViewById(R.id.errorMessageTextView);
@@ -166,6 +170,7 @@ public class MainMenuController {
         return tempArray;
     }
 
+    //For Capitalizing First Letter of a String.
     private String capitalizeFirstLetter(String text) {
         String capitalizedText = null;
         char firstChar = text.charAt(0);
@@ -173,11 +178,13 @@ public class MainMenuController {
         return capitalizedText;
     }
 
+    //For Enabling Wifi.
     public void doEnableWifi(Context context) {
         InternetHandler internetHandler = new InternetHandler(context);
         internetHandler.enableWifi();
     }
 
+    //For Enabling Mobile Data.
     public void doEnableMobileData(Context context) {
         InternetHandler internetHandler = new InternetHandler(context);
         internetHandler.setEnableMobileData(true);

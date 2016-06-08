@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 /**
- * Created by bbirincioglu on 3/6/2016.
+ * Basic informative dialog. This just displays a message for informing players.
  */
 public class InformativeDialog extends Dialog implements SimpleDialog {
     private Activity activity;
@@ -29,9 +29,9 @@ public class InformativeDialog extends Dialog implements SimpleDialog {
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        int width = displayMetrics.widthPixels;
-        int height = displayMetrics.heightPixels;
-        container.setLayoutParams(new LinearLayout.LayoutParams(width / 2, LinearLayout.LayoutParams.WRAP_CONTENT));
+        int width = displayMetrics.widthPixels; //screenWidth
+        int height = displayMetrics.heightPixels; //screenHeight
+        container.setLayoutParams(new LinearLayout.LayoutParams(width / 2, LinearLayout.LayoutParams.WRAP_CONTENT)); //set width, and height of the dialog according to screen width and height.
 
         Button button = (Button) findViewById(R.id.informativeDialogButton);
         button.setOnClickListener(new View.OnClickListener() {

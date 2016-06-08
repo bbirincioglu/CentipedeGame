@@ -3,7 +3,7 @@ package com.example.bbirincioglu.centipedegame;
 import android.bluetooth.BluetoothSocket;
 
 /**
- * Created by bbirincioglu on 3/14/2016.
+ * Singleton Object to store bluetooth socket which is used for communicating with other phone (via input-output streams), and whether the player is hosted or not.
  */
 public class SocketSingleton {
     private static SocketSingleton instance;

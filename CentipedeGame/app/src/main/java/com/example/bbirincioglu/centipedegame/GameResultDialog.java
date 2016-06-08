@@ -17,7 +17,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 /**
- * Created by bbirincioglu on 3/16/2016.
+ * Final dialog displayed to the players when the game is finished. Contains every information such as names, surnames, final total, final step number, payoffs etc.
  */
 public class GameResultDialog extends Dialog implements SimpleDialog {
     private Activity activity;
@@ -44,6 +44,39 @@ public class GameResultDialog extends Dialog implements SimpleDialog {
         findViewById(R.id.exitButton).setOnClickListener(buttonListener);
     }
 
+    //Data stored in the game result object will be inserted into this GUI object's components. Most of the components are of type TextView.
+    public void injectContent(GameResult gameResult) {
+        Activity activity = getActivity();
+        GameSettings gameSettings = GameSettings.loadFromPreferences(activity);
+        displayValues(gameSettings);
+
+        String p1Name = gameResult.getP1Name();
+        String p1Surname = gameResult.getP1Surname();
+        String p1Commitment = gameResult.getP1Commitment();
+        String p1Payoff = gameResult.getP1Payoff();
+
+        String p2Name = gameResult.getP2Name();
+        String p2Surname = gameResult.getP2Surname();
+        String p2Commitment = gameResult.getP2Commitment();
+        String p2Payoff = gameResult.getP2Payoff();
+
+        ((TextView) findViewById(R.id.finalStepNumberEditText)).setText("FINAL STEP NUM: " + gameResult.getFinalStepNumber());
+        ((TextView) findViewById(R.id.finalTotalEditText)).setText("FINAL TOTAL: " + gameResult.getFinalTotal());
+
+        ((TextView) findViewById(R.id.p1NameEditText)).setText(p1Name);
+        ((TextView) findViewById(R.id.p1CommitmentEditText)).setText(p1Commitment);
+        ((TextView) findViewById(R.id.p1PayoffEditText)).setText(p1Payoff);
+
+        ((TextView) findViewById(R.id.p2NameEditText)).setText(p2Name);
+        ((TextView) findViewById(R.id.p2CommitmentEditText)).setText(p2Commitment);
+        ((TextView) findViewById(R.id.p2PayoffEditText)).setText(p2Payoff);
+
+        ((SeekBar) findViewById(R.id.maximumStepNumberSeekBar)).setVisibility(View.GONE);
+        fixParams((TableLayout) findViewById(R.id.settingsTableLayout)); //Fix alignments of components.
+    }
+
+    //Not only inserts data stored in the game result object, but it also inserts some final values to gameResult object such as finalStepNumber, finalTotal, p1Payoff etc.
+    //Other than that, it is the same as injectContent();
     public void injectContentAndCompleteGameResult(GameResult gameResult) {
         Activity activity = getActivity();
         GameSettings gameSettings = GameSettings.loadFromPreferences(activity);
@@ -69,36 +102,6 @@ public class GameResultDialog extends Dialog implements SimpleDialog {
         double[] result = new GameResultEvaluator().evaluate(gameResult);
         gameResult.setP1Payoff(String.valueOf(result[0]));
         gameResult.setP2Payoff(String.valueOf(result[1]));
-
-        String p1Name = gameResult.getP1Name();
-        String p1Surname = gameResult.getP1Surname();
-        String p1Commitment = gameResult.getP1Commitment();
-        String p1Payoff = gameResult.getP1Payoff();
-
-        String p2Name = gameResult.getP2Name();
-        String p2Surname = gameResult.getP2Surname();
-        String p2Commitment = gameResult.getP2Commitment();
-        String p2Payoff = gameResult.getP2Payoff();
-
-        ((TextView) findViewById(R.id.finalStepNumberEditText)).setText("FINAL STEP NUM: " + gameResult.getFinalStepNumber());
-        ((TextView) findViewById(R.id.finalTotalEditText)).setText("FINAL TOTAL: " + gameResult.getFinalTotal());
-
-        ((TextView) findViewById(R.id.p1NameEditText)).setText(p1Name);
-        ((TextView) findViewById(R.id.p1CommitmentEditText)).setText(p1Commitment);
-        ((TextView) findViewById(R.id.p1PayoffEditText)).setText(p1Payoff);
-
-        ((TextView) findViewById(R.id.p2NameEditText)).setText(p2Name);
-        ((TextView) findViewById(R.id.p2CommitmentEditText)).setText(p2Commitment);
-        ((TextView) findViewById(R.id.p2PayoffEditText)).setText(p2Payoff);
-
-        ((SeekBar) findViewById(R.id.maximumStepNumberSeekBar)).setVisibility(View.GONE);
-        fixParams((TableLayout) findViewById(R.id.settingsTableLayout));
-    }
-
-    public void injectContent(GameResult gameResult) {
-        Activity activity = getActivity();
-        GameSettings gameSettings = GameSettings.loadFromPreferences(activity);
-        displayValues(gameSettings);
 
         String p1Name = gameResult.getP1Name();
         String p1Surname = gameResult.getP1Surname();
@@ -186,6 +189,7 @@ public class GameResultDialog extends Dialog implements SimpleDialog {
         }
     }
 
+    //Display game settings on the screen.
     private void displayValues(GameSettings gameSettings) {
         String maximumStepNumber = gameSettings.getMaximumStepNumber();
         String ratio = gameSettings.getRatio();
@@ -232,16 +236,5 @@ public class GameResultDialog extends Dialog implements SimpleDialog {
 
         disableOrEnableContainerAndChildren((TableLayout) findViewById(R.id.settingsTableLayout), false);
         findViewById(R.id.settingsSaveButton).setVisibility(View.GONE);
-        /*TableLayout settingsTableLayout = (TableLayout) findViewById(R.id.settingsTableLayout);
-        int childCount = settingsTableLayout.getChildCount();
-
-        for (int i = 0; i < childCount; i++) {
-            View child = settingsTableLayout.getChildAt(i);
-
-            if (child instanceof TableRow) {
-                TableRow tableRow = (TableRow) child;
-                ((TableLayout.LayoutParams) tableRow.getLayoutParams()).bottomMargin = 0;
-            }
-        }*/
     }
 }

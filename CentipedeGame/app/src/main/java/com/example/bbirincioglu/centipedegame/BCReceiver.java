@@ -9,7 +9,7 @@ import android.content.Intent;
 import java.util.ArrayList;
 
 /**
- * Created by bbirincioglu on 3/1/2016.
+ * This class is responsible from storing, and getting paired devices (Devices that are previously connected or just connected).
  */
 public class BCReceiver extends BroadcastReceiver {
     private ArrayList<BCReceiverObserver> observers;
